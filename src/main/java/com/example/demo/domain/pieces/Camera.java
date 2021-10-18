@@ -5,6 +5,7 @@ public class Camera {
 	private Long id;
 	private String model;
 	private Double megapixels;
+
 	public Camera(Long id, String model, Double megapixels) {
 		this.id = id;
 		this.model = model;
@@ -19,6 +20,7 @@ public class Camera {
 	public Double getMegapixels() {
 		return megapixels;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -28,6 +30,7 @@ public class Camera {
 	public void setMegapixels(Double megapixels) {
 		this.megapixels = megapixels;
 	}
+
 	@Override
 	public String toString() {
 		return "Camera [id=" + id + ", model=" + model + ", megapixels=" + megapixels + "]";

@@ -5,6 +5,7 @@ public class CPU {
 	private Long id;
 	private Boolean on = false;
 	private Integer cores;
+
 	public CPU(Long id, Integer cores) {
 		this.id = id;
 		this.cores = cores;
@@ -23,6 +24,7 @@ public class CPU {
 	public Integer getCores() {
 		return cores;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -32,6 +34,7 @@ public class CPU {
 	public void setCores(Integer cores) {
 		this.cores = cores;
 	}
+
 	@Override
 	public String toString() {
 		return "CPU [id=" + id + ", on=" + on + ", cores=" + cores + "]";

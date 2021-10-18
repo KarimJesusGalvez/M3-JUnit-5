@@ -5,6 +5,7 @@ public class RAM {
 	private Long id;
 	private String type;
 	private Integer gigabytes;
+
 	public RAM(Long id, String type, Integer gigabytes) {
 		this.id = id;
 		this.type = type;
@@ -16,9 +17,8 @@ public class RAM {
 	public String getType() {
 		return type;
 	}
-	public Integer getGigabytes() {
-		return gigabytes;
-	}
+	public Integer getGigabytes() {return gigabytes;}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -28,6 +28,7 @@ public class RAM {
 	public void setGigabytes(Integer gigabytes) {
 		this.gigabytes = gigabytes;
 	}
+
 	@Override
 	public String toString() {
 		return "RAM [id=" + id + ", type=" + type + ", gigabytes=" + gigabytes + "]";
