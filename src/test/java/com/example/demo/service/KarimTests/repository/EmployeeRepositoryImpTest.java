@@ -100,13 +100,7 @@ public class EmployeeRepositoryImpTest {
     @DisplayName("check the null id")
     void deleteAllNull() {
 
-        try {
-            employeeRepository.deleteAll();
-            assertNull(found); // Unreachable
-        }catch(IllegalArgumentException error){
-            error.printStackTrace();
-            assertThrows(IllegalArgumentException.class, ()->employeeRepository.findOne(null));
-        }
+
     }
 
 
