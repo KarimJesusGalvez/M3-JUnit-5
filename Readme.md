@@ -14,4 +14,6 @@ GUIDELINES
 * Always check for null status
 * Check range of the primitives
 * Ensure no trailing data remains after call
-* 
+
+
+https://github.com/mawrkus/js-unit-testing-guide
