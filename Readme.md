@@ -8,12 +8,16 @@ In src/test/java/.../service there is a copy of the user guide of Junit 5
 
 PENDING
 
-* Achieve 100% testing coverage
+* Achieve 100% testing coverage (Or at least ~80%)
+
+* Mockito Implementation in repository test cases
+
 ***
-GUIDELINES
+  GUIDELINES
 * Always check for null status
 * Check range of the primitives
 * Ensure no trailing data remains after call
 
-
+***
 https://github.com/mawrkus/js-unit-testing-guide
+https://pylonsproject.org/community-unit-testing-guidelines.html

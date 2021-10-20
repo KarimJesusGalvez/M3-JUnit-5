@@ -1,4 +1,4 @@
-package com.example.demo.service.Conceptos.concepto5;
+package com.example.demo.service.JUnit.Conceptos.concepto5;
 
 import com.example.demo.domain.SmartPhone;
 import com.example.demo.service.SmartPhoneServiceImpl;

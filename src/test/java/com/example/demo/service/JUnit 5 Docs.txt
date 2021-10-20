@@ -3505,7 +3505,7 @@ junit-platform-commons in test scope
 opentest4j in test scope
 
 4.4.2. Display Names vs. Technical Names
-To define a custom display name for the class run via @RunWith(JUnitPlatform.class) annotate the class with @SuiteDisplayName and provide a custom value.
+To define a custom display name for the class run via @RunWith(JUnitPlatform.class) annotate the class with S@uiteDisplayName and provide a custom value.
 
 By default, display names will be used for test artifacts; however, when the JUnitPlatform runner is used to execute tests with a build tool such as Gradle or Maven, the generated test report often needs to include the technical names of test artifacts — for example, fully qualified class names — instead of shorter display names like the simple name of a test class or a custom display name containing special characters. To enable technical names for reporting purposes, declare the @UseTechnicalNames annotation alongside @RunWith(JUnitPlatform.class).
 

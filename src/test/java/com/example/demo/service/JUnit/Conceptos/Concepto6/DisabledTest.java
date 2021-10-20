@@ -1,4 +1,4 @@
-package com.example.demo.service.Conceptos.Concepto6;
+package com.example.demo.service.JUnit.Conceptos.Concepto6;
 
 import com.example.demo.service.SmartPhoneServiceImpl;
 import org.junit.jupiter.api.Disabled;

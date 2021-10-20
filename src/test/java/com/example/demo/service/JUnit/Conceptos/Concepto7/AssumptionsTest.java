@@ -1,4 +1,4 @@
-package com.example.demo.service.Conceptos.Concepto7;
+package com.example.demo.service.JUnit.Conceptos.Concepto7;
 
 import com.example.demo.service.SmartPhoneServiceImpl;
 import org.junit.jupiter.api.Test;

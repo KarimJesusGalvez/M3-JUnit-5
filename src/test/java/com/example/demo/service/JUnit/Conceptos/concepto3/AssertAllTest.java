@@ -1,4 +1,4 @@
-package com.example.demo.service.Conceptos.concepto3;
+package com.example.demo.service.JUnit.Conceptos.concepto3;
 
 import com.example.demo.service.SmartPhoneServiceImpl;
 import org.junit.jupiter.api.DisplayName;

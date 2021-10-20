@@ -1,9 +1,7 @@
-package com.example.demo.service.Conceptos.Concepto7;
+package com.example.demo.service.JUnit.Conceptos.Concepto7;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.*;
-
-import java.util.function.BiConsumer;
 
 import static org.junit.jupiter.api.Assertions.*;
 

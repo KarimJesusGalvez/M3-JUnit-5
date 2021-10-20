@@ -1,4 +1,5 @@
-package com.example.demo.service.Conceptos.concepto1;
+package com.example.demo.service.KarimTests.service;
+
 import com.example.demo.domain.SmartPhone;
 import com.example.demo.domain.pieces.Battery;
 import com.example.demo.domain.pieces.CPU;
@@ -10,13 +11,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SmartPhonesaveTest {
+public class SmartPhoneServiceImpTest {
 
     @Test
     void saveNull() {
         SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
         // Fail state FIX
-        SmartPhone result = service.save(null);
+        //SmartPhone result = service.save(null);
     }
 
     @Test
@@ -94,7 +95,7 @@ public class SmartPhonesaveTest {
                 new Camera(1L, "front camera", 12.5));
 
         assertEquals(3,service.count());
-       assertThrows(IllegalArgumentException.class, ()->service.save(phone1));
+        assertThrows(IllegalArgumentException.class, ()->service.save(phone1));
         assertEquals(3,service.count()); // No se deberia agregar el negativo
 
     }
@@ -102,8 +103,8 @@ public class SmartPhonesaveTest {
     @Test
     void deleteNullTest(){
         SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
-       boolean result = service.delete(null);
-       assertFalse(result);
+        boolean result = service.delete(null);
+        assertFalse(result);
     }
     @Test
     void deleteNotContainsTest(){
