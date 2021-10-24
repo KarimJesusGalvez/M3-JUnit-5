@@ -1,5 +1,6 @@
 package com.example.demo.service.KarimTests.service;
 
+import com.example.demo.domain.Employee;
 import com.example.demo.domain.SmartPhone;
 import com.example.demo.domain.pieces.Battery;
 import com.example.demo.domain.pieces.CPU;
@@ -7,124 +8,263 @@ import com.example.demo.domain.pieces.Camera;
 import com.example.demo.domain.pieces.RAM;
 import com.example.demo.service.SmartPhoneServiceImpl;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class SmartPhoneServiceImpTest {
 
+
+    @Nested
+    public class Count_tests {
+
     @Test
-    void saveNull() {
+    void countTest() {
+
         SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
-        // Fail state FIX
-        //SmartPhone result = service.save(null);
+//        creates 3 obj
+        Integer num = service.count();
+
+        assertAll(
+                () -> assertNotNull(num),
+                () -> assertTrue(num > 0),
+                () -> assertEquals(3, num)
+        );
+    }
+}
+    @Nested
+    public class FIND_tests {
+
+
+        @Test
+        @DisplayName("display all entries")
+        void findAllReturnTest() {
+            SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
+
+            List<SmartPhone> found = service.findAll();
+            List<SmartPhone> b = new ArrayList<SmartPhone>();
+
+            assertAll(
+                    () -> assertNotNull(found),
+                    () -> assertTrue(found.size() > 0),
+                    () -> assertSame(b.getClass(), found.getClass())
+            );
+            int nullcount = 0;
+            for (SmartPhone count : found)
+                while (nullcount < found.size()) {
+                    assertNotNull(count); // if any is null break
+                    nullcount += 1;
+                }
+            // TODO Fix null check for count(see line above)
+        }
+
+        @Test
+        @DisplayName("check an id")
+        void findOneReturn1Test() {
+
+            SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
+
+            SmartPhone found = service.findOne(1L);
+            assertAll(
+                    () -> assertNotNull(found),
+                    () -> assertTrue(found.getId() > 0),
+                    () -> assertTrue(found.getCamera().getMegapixels() == 12.5
+                            && found.getWifi() == false),
+                    () -> assertTrue(found.getId().equals(1L)),
+                    () -> assertTrue(found.getName() == "One plus 9")
+            );
+        }
+
+        @Test
+        @DisplayName("check the null id")
+        void findOneReturnNullTest() {
+
+            SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
+
+            try {
+                SmartPhone found = service.findOne(null);
+                assertNull(found); // Unreachable
+            } catch (IllegalArgumentException error) {
+                error.printStackTrace();
+                assertThrows(IllegalArgumentException.class, () -> service.findOne(null));
+            }
+        }
+
+
+        @Test
+        @DisplayName("Find by wifi")
+        void findbyWifiTest() {
+
+            SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
+
+            List<SmartPhone> found = service.findByWifi(true);
+            assertAll(
+                    () -> assertNotNull(found),
+                    () -> assertTrue(found.get(0).getId() > 0),
+                    () -> assertTrue(found.get(0).getCamera().getMegapixels() == 8.5
+                            && found.get(0).getWifi() == true),
+                    () -> assertTrue(found.get(1).getId().equals(3L)),
+                    () -> assertFalse(found.get(0).getName() == "One plus 9")
+            );
+        }
+
+        @Test
+        @DisplayName("Find by wifi in null")
+        void findbyWifiNullTest() {
+
+            SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
+            service.deleteAll();
+            List<SmartPhone> found = service.findByWifi(true);
+            assertTrue(found.isEmpty());
+
+        }
     }
 
-    @Test
-    void saveIdNullTest() {
-        SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
+    @Nested
+    public class Save {
+        @Test
+        void saveNull() {
+            SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
+            // Fail state FIX
+            //SmartPhone result = service.save(null);
+        }
 
-        SmartPhone phone1 = new SmartPhone(null, "One plus 9",
-                new RAM(1L, "DDR4", 8),
-                new Battery(1L, 4500.0),
-                new CPU(1L, 4),
-                false,
-                new Camera(1L, "front camera", 12.5));
+        @Test
+        void saveIdNullTest() {
+            SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
 
-        assertEquals(3,service.count());
-        SmartPhone result = service.save(phone1);
-        assertEquals(4,service.count());
+            SmartPhone phone1 = new SmartPhone(null, "One plus 9",
+                    new RAM(1L, "DDR4", 8),
+                    new Battery(1L, 4500.0),
+                    new CPU(1L, 4),
+                    false,
+                    new Camera(1L, "front camera", 12.5));
 
-        assertNotNull(phone1);
-        assertNotNull(result.getId());
-        assertEquals(4, result.getId());
+            assertEquals(3, service.count());
+            SmartPhone result = service.save(phone1);
+            assertEquals(4, service.count());
+
+            assertNotNull(phone1);
+            assertNotNull(result.getId());
+            assertEquals(4, result.getId());
+        }
+
+        @Test
+        @DisplayName("If 0 should assign a new value")
+        void saveIdZeroTest() {
+            SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
+
+            SmartPhone phone1 = new SmartPhone(0L, "One plus 9",
+                    new RAM(1L, "DDR4", 8),
+                    new Battery(1L, 4500.0),
+                    new CPU(1L, 4),
+                    false,
+                    new Camera(1L, "front camera", 12.5));
+
+            assertEquals(3, service.count());
+            SmartPhone result = service.save(phone1);
+            assertEquals(4, service.count());
+
+            assertNotNull(phone1);
+            assertNotNull(result.getId());
+            assertEquals(4, result.getId());
+        }
+
+        @Test
+        @DisplayName("Comprobar actualizacion correcta")
+        void saveUpdateTest() {
+
+            SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
+
+            SmartPhone phone1 = new SmartPhone(1L, "One plus 9editado",
+                    new RAM(1L, "DDR4", 8),
+                    new Battery(1L, 4500.0),
+                    new CPU(1L, 4),
+                    false,
+                    new Camera(1L, "front camera", 12.5));
+
+            assertEquals(3, service.count());
+            SmartPhone result = service.save(phone1);
+            assertEquals(3, service.count()); // No se agrega ninguno
+
+            assertEquals(1L, result.getId());
+
+            assertEquals("One plus 9editado", phone1.getName());
+
+        }
+
+        @Test
+        @DisplayName("Saving a negative ID")
+        void saveNegativeID() {
+            SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
+
+            SmartPhone phone1 = new SmartPhone(-4L, "One plus 9editado",
+                    new RAM(1L, "DDR4", 8),
+                    new Battery(1L, 4500.0),
+                    new CPU(1L, 4),
+                    false,
+                    new Camera(1L, "front camera", 12.5));
+
+            assertEquals(3, service.count());
+            assertThrows(IllegalArgumentException.class, () -> service.save(phone1));
+            assertEquals(3, service.count()); // No se deberia agregar el negativo
+
+        }
+
+        @Test
+        void getMaxIdNullTest() {
+            SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
+
+            service.deleteAll();
+            SmartPhone phone1 = new SmartPhone(0L, "One plus 9editado",
+                    new RAM(1L, "DDR4", 8),
+                    new Battery(1L, 4500.0),
+                    new CPU(1L, 4),
+                    false,
+                    new Camera(1L, "front camera", 12.5));
+
+            service.save(phone1);
+
+            assertTrue(service.findOne(1L) == phone1);
+        }
     }
-    @Test
-    @DisplayName("If 0 should assign a new value")
-    void saveIdZeroTest() {
-        SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
 
-        SmartPhone phone1 = new SmartPhone(0L, "One plus 9",
-                new RAM(1L, "DDR4", 8),
-                new Battery(1L, 4500.0),
-                new CPU(1L, 4),
-                false,
-                new Camera(1L, "front camera", 12.5));
+    @Nested
+    public class delete {
 
-        assertEquals(3,service.count());
-        SmartPhone result = service.save(phone1);
-        assertEquals(4,service.count());
+        @Test
+        void deleteNullTest() {
+            SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
+            boolean result = service.delete(null);
+            assertFalse(result);
+        }
 
-        assertNotNull(phone1);
-        assertNotNull(result.getId());
-        assertEquals(4, result.getId());
-    }
+        @Test
+        void deleteNotContainsTest() {
+            SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
+            boolean result = service.delete(-1L);
+            assertFalse(result);
+        }
 
-    @Test
-    @DisplayName("Comprobar actualizacion correcta")
-    void saveUpdateTest() {
-
-        SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
-
-        SmartPhone phone1 = new SmartPhone(1L, "One plus 9editado",
-                new RAM(1L, "DDR4", 8),
-                new Battery(1L, 4500.0),
-                new CPU(1L, 4),
-                false,
-                new Camera(1L, "front camera", 12.5));
-
-        assertEquals(3,service.count());
-        SmartPhone result = service.save(phone1);
-        assertEquals(3,service.count()); // No se agrega ninguno
-
-        assertEquals(1L,result.getId());
-
-        assertEquals("One plus 9editado", phone1.getName());
-
-    }
-
-    @Test
-    void saveNegativeID(){
-        SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
-
-        SmartPhone phone1 = new SmartPhone(-4L, "One plus 9editado",
-                new RAM(1L, "DDR4", 8),
-                new Battery(1L, 4500.0),
-                new CPU(1L, 4),
-                false,
-                new Camera(1L, "front camera", 12.5));
-
-        assertEquals(3,service.count());
-        assertThrows(IllegalArgumentException.class, ()->service.save(phone1));
-        assertEquals(3,service.count()); // No se deberia agregar el negativo
-
-    }
-
-    @Test
-    void deleteNullTest(){
-        SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
-        boolean result = service.delete(null);
-        assertFalse(result);
-    }
-    @Test
-    void deleteNotContainsTest(){
-        SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
-        boolean result = service.delete(-1L);
-        assertFalse(result);
-    }
-    @Test
-    void deleteOKTest(){
-        SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
-        boolean result = service.delete(1L);
-        assertTrue(result);
-    }
+        @Test
+        void deleteOKTest() {
+            SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
+            boolean result = service.delete(1L);
+            assertTrue(result);
+        }
 
 
-    @Test
-    void deleteAllTest(){
-        SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
-        assertTrue(service.count()>0);
-        service.deleteAll();
-        assertEquals(0,service.count());
+        @Test
+        void deleteAllTest() {
+            SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
+            assumeTrue(service.count() > 0);
+            service.deleteAll();
+            assertEquals(0, service.count());
+        }
     }
 }
