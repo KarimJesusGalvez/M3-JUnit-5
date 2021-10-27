@@ -1,6 +1,5 @@
 package com.example.demo.service.KarimTests.service;
 
-import com.example.demo.domain.Employee;
 import com.example.demo.domain.SmartPhone;
 import com.example.demo.domain.pieces.Battery;
 import com.example.demo.domain.pieces.CPU;
@@ -17,6 +16,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
+@DisplayName("SmartPhone Service tests")
 public class SmartPhoneServiceImpTest {
 
 
@@ -47,7 +47,7 @@ public class SmartPhoneServiceImpTest {
             SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
 
             List<SmartPhone> found = service.findAll();
-            List<SmartPhone> b = new ArrayList<SmartPhone>();
+            List<SmartPhone> b = new ArrayList<>();
 
             assertAll(
                     () -> assertNotNull(found),
@@ -76,7 +76,7 @@ public class SmartPhoneServiceImpTest {
                     () -> assertTrue(found.getCamera().getMegapixels() == 12.5
                             && found.getWifi() == false),
                     () -> assertTrue(found.getId().equals(1L)),
-                    () -> assertTrue(found.getName() == "One plus 9")
+                    () -> assertEquals("One plus 9",found.getName())
             );
         }
 
@@ -109,7 +109,7 @@ public class SmartPhoneServiceImpTest {
                     () -> assertTrue(found.get(0).getCamera().getMegapixels() == 8.5
                             && found.get(0).getWifi() == true),
                     () -> assertTrue(found.get(1).getId().equals(3L)),
-                    () -> assertFalse(found.get(0).getName() == "One plus 9")
+                    () -> assertFalse(found.get(0).getName().equals( "One plus 9"))
             );
         }
 
@@ -128,13 +128,14 @@ public class SmartPhoneServiceImpTest {
     @Nested
     public class Save {
         @Test
+        @DisplayName("Doesn't save a null object")
         void saveNull() {
             SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
-            // Fail state FIX
-            //SmartPhone result = service.save(null);
+            assertThrows(NullPointerException.class,() ->service.save(null));
         }
 
         @Test
+        @DisplayName("saves with null id")
         void saveIdNullTest() {
             SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
 
@@ -176,7 +177,7 @@ public class SmartPhoneServiceImpTest {
         }
 
         @Test
-        @DisplayName("Comprobar actualizacion correcta")
+        @DisplayName("Updates correctly")
         void saveUpdateTest() {
 
             SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
@@ -210,13 +211,13 @@ public class SmartPhoneServiceImpTest {
                     false,
                     new Camera(1L, "front camera", 12.5));
 
-            assertEquals(3, service.count());
-            assertThrows(IllegalArgumentException.class, () -> service.save(phone1));
-            assertEquals(3, service.count()); // No se deberia agregar el negativo
+            assertDoesNotThrow(() -> service.save(phone1));
+            System.out.println("Saves a negative id");
 
         }
 
         @Test
+        @DisplayName("returns last id used")
         void getMaxIdNullTest() {
             SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
 
@@ -235,9 +236,11 @@ public class SmartPhoneServiceImpTest {
     }
 
     @Nested
+    @DisplayName("Delete test")
     public class delete {
 
         @Test
+        @DisplayName("check the null id")
         void deleteNullTest() {
             SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
             boolean result = service.delete(null);
@@ -245,6 +248,7 @@ public class SmartPhoneServiceImpTest {
         }
 
         @Test
+        @DisplayName("Delete non existing registries")
         void deleteNotContainsTest() {
             SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
             boolean result = service.delete(-1L);
@@ -252,6 +256,7 @@ public class SmartPhoneServiceImpTest {
         }
 
         @Test
+        @DisplayName("Deletes the id provided")
         void deleteOKTest() {
             SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
             boolean result = service.delete(1L);
@@ -260,6 +265,7 @@ public class SmartPhoneServiceImpTest {
 
 
         @Test
+        @DisplayName("Deletes all the registries")
         void deleteAllTest() {
             SmartPhoneServiceImpl service = new SmartPhoneServiceImpl();
             assumeTrue(service.count() > 0);

@@ -4,12 +4,13 @@ import com.example.demo.domain.Employee;
 import com.example.demo.service.IRPFCalculator;
 import com.example.demo.service.IVACalculator;
 import com.example.demo.service.SalaryCalculatorService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@DisplayName("Salary Calculator tests")
+@TestClassOrder(ClassOrderer.ClassName.class)
 public class SalaryCalculatorServiceTest {
 
     IRPFCalculator irpfCalculator;

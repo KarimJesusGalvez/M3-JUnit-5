@@ -7,20 +7,20 @@ import com.example.demo.domain.pieces.CPU;
 import com.example.demo.domain.pieces.Camera;
 import com.example.demo.domain.pieces.RAM;
 import com.example.demo.service.SmartPhoneServiceImpl;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+@DisplayName("SmartPhone Class Test")
+@TestClassOrder(ClassOrderer.ClassName.class)
 public class SmarphoneTest {
 
     SmartDevice smartPhone;
     SmartDevice smartPhoneempty;
     SmartPhone smartPhoneProper;
+
     @BeforeEach
     void setup() {
         smartPhoneempty = new SmartPhone();
@@ -38,47 +38,52 @@ public class SmarphoneTest {
                 new CPU(1L, 4), false,
                 new Camera(1L, "front camera", 12.5));
     }
+
     @Nested
+    @Order(1)
     public class contructorTest {
 
         @Test
+        @DisplayName("Construct empty object")
         void emptyConstructorTest() {
             SmartDevice smartPhone = new SmartPhone();
             assertThat(smartPhone, instanceOf(SmartDevice.class));
             assertThat(smartPhone, instanceOf(SmartPhone.class));
         }
+
         @Test
+        @DisplayName("Construct filled object")
         void fullConstructorTest() {
 
 
             assertThat(smartPhone, instanceOf(SmartDevice.class));
             assertThat(smartPhone, instanceOf(SmartPhone.class));
 
-            assertEquals(4500,smartPhone.getBattery().getCapacity()) ;
-            assertEquals(false,smartPhone.getWifi()) ;
-            assertEquals(4,smartPhone.getCpu().getCores()) ;
+            assertEquals(4500, smartPhone.getBattery().getCapacity());
+            assertEquals(false, smartPhone.getWifi());
+            assertEquals(4, smartPhone.getCpu().getCores());
 
         }
-        @Nested
-        public class get_set_toStringTest {
+    }
+    @Nested
+    @DisplayName("Getter Setters and Print")
+    public class get_set_toStringTest {
 
-            @Test
-            void getCameraTest() {
-                Camera temp = new Camera(1L, "front camera", 12.5);
-                assertEquals(smartPhoneProper.getCamera().getMegapixels(), temp.getMegapixels());
-            }
-
-            @Test
-            void setCameraTest() {
-                smartPhoneProper.setCamera(new Camera(2L, "High Contrast camera", 0.5));
-            }
-
-            @Test
-            void toStringTest() {
-                String temp = smartPhoneempty.toString();
-                assertEquals(temp, "SmartPhone [camera=null, getId()=null, getName()=null, getRam()=null, getBattery()=null, getCpu()=null, getWifi()=null]");
-            }
+        @Test
+        void getCameraTest() {
+            Camera temp = new Camera(1L, "front camera", 12.5);
+            assertEquals(smartPhoneProper.getCamera().getMegapixels(), temp.getMegapixels());
         }
 
+        @Test
+        void setCameraTest() {
+            smartPhoneProper.setCamera(new Camera(2L, "High Contrast camera", 0.5));
+        }
+
+        @Test
+        void toStringTest() {
+            String temp = smartPhoneempty.toString();
+            assertEquals(temp, "SmartPhone [camera=null, getId()=null, getName()=null, getRam()=null, getBattery()=null, getCpu()=null, getWifi()=null]");
+        }
     }
 }

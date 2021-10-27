@@ -3,27 +3,24 @@ package com.example.demo.service.KarimTests.service;
 import com.example.demo.domain.SmartPhone;
 import com.example.demo.domain.SmartWatch;
 import com.example.demo.service.SmartDeviceFacade;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@DisplayName("SmartDevice Facade tests")
+@TestClassOrder(ClassOrderer.ClassName.class)
 class SmartDeviceFacadeTest {
 
 
-
     @Test
+    @DisplayName("Cannot create a Phone from a Watch")
     void createSmartPhoneWrongTest() {
-
             assertThrows(ClassCastException.class, () -> SmartDeviceWrongPhoneCast());
-
     }
-
-    private void SmartDeviceWrongPhoneCast() {
-        SmartWatch smartWatch = (SmartWatch) SmartDeviceFacade.createSmartPhone();
-    }
+    private void SmartDeviceWrongPhoneCast() {SmartWatch smartWatch = (SmartWatch) SmartDeviceFacade.createSmartPhone();}
 
     @Test
+    @DisplayName("Creates a Smartphone")
     void createSmartPhoneOKTest() {
 
             SmartPhone smartPhone = (SmartPhone) SmartDeviceFacade.createSmartPhone();
@@ -33,17 +30,18 @@ class SmartDeviceFacadeTest {
             assertTrue(smartPhone.getWifi());
     }
 
-    private void SmartDeviceWrongWatchCast() {
-        SmartPhone smartPhone = (SmartPhone) SmartDeviceFacade.createSmartWatch();
-    }
     @Test
+    @DisplayName("Cannot create a Watch from a Phone")
     void createSmartWatchWrongTest() {
 
         assertThrows(ClassCastException.class, () -> SmartDeviceWrongWatchCast());
-
-        }
+    }
+    private void SmartDeviceWrongWatchCast() {
+        SmartPhone smartPhone = (SmartPhone) SmartDeviceFacade.createSmartWatch();
+    }
 
     @Test
+    @DisplayName("Creates an SmartWatch")
     void createSmartWatchOKTest() {
 
             SmartWatch smartWatch = (SmartWatch) SmartDeviceFacade.createSmartWatch();

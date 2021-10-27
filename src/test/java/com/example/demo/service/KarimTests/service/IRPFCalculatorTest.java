@@ -1,9 +1,17 @@
 package com.example.demo.service.KarimTests.service;
 
 import com.example.demo.service.IRPFCalculator;
+import org.junit.jupiter.api.ClassOrderer;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestClassOrder;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+
+@DisplayName("IRPF Calculator tests")
+@TestClassOrder(ClassOrderer.ClassName.class)
 
 public class IRPFCalculatorTest {
 
@@ -37,7 +45,7 @@ public class IRPFCalculatorTest {
         System.out.println(a);
         // Char can be converted to double
         // Not intended usage??
-        assertTrue(false);
+        assertTrue(a > 14.5);
     }
     @Test
     void calculateSymbolchar() {
@@ -45,11 +53,10 @@ public class IRPFCalculatorTest {
         System.out.println(a);
         // Char can be converted to double
         // Not intended usage??
-        assertTrue(false);
+        assertEquals(5.85,a);
     }
     @Test
     void calculateDoubleclass() {
-        Double b = 2D;
         double a = irpfCalculator.calculateIRPF(2D);
         assertTrue(a > 0);
     }

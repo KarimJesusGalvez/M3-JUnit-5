@@ -1,7 +1,10 @@
 package com.example.demo.service.KarimTests.domain;
 
 import com.example.demo.domain.SmartColor;
+import org.junit.jupiter.api.ClassOrderer;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestClassOrder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,9 +14,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+@DisplayName("SmartColor Enumeration Test")
+@TestClassOrder(ClassOrderer.ClassName.class)
 public class SmartColorTest {
 
     @Test
+    @DisplayName("Check Color assigment")
     void name() {
         SmartColor[] temp;
         assertDoesNotThrow(() ->SmartColor.values());

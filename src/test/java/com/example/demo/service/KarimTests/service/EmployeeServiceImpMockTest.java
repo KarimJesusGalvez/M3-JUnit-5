@@ -2,21 +2,12 @@ package com.example.demo.service.KarimTests.service;
 
 import com.example.demo.domain.Employee;
 import com.example.demo.repository.EmployeeRepository;
-import com.example.demo.repository.EmployeeRepositoryImpl;
 import com.example.demo.service.EmployeeService;
 import com.example.demo.service.EmployeeServiceImpl;
-import net.bytebuddy.matcher.NegatingMatcher;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.*;
+
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +18,8 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 //@ExtendWith(MockitoExtension.class)
-@DisplayName("Employee Interface and implementation")
+@DisplayName("Mock Employee Service Tests")
+@TestClassOrder(ClassOrderer.ClassName.class)
 public class EmployeeServiceImpMockTest {
 
 
@@ -56,8 +48,9 @@ public class EmployeeServiceImpMockTest {
 
         when(mockEmployeeRepository.delete(anyLong())).thenReturn(true);
         // TODO FIX implementation longThat()
+        // verify(repository).saveAll(argThat)(list)
 
-        // To return void no config is needed
+        // To return void no configuration is needed
         // when(mockEmployeeRepository.deleteAll()).thenReturn(null);
 
         employeeService = new EmployeeServiceImpl(mockEmployeeRepository);
@@ -85,7 +78,7 @@ public class EmployeeServiceImpMockTest {
         void findAllReturnTest() {
 
             List<Employee> found = employeeService.findAll();
-            List<Employee> b = new ArrayList<Employee>();
+            List<Employee> b = new ArrayList<>();
 
             assertAll(
                     () -> assertNotNull(found),
@@ -181,13 +174,10 @@ public class EmployeeServiceImpMockTest {
             // Shouldn't save empty obj, change behaviour?
             Employee employee = new Employee();
             //assumeTrue(employee == null);
-            int temp = employeeService.count();
             Employee employee1 = employeeService.save(employee);
             assertNotNull(employee1);
 
             verify(mockEmployeeRepository,atLeastOnce()).save(employee);
-
-
 
         }
 
@@ -197,8 +187,8 @@ public class EmployeeServiceImpMockTest {
 
             Employee employee = employeeService.findOne(1L);
             employee.setId(null);
-            Employee employee1 = employeeService.save(employee);
-            assertNull(employee1.getId());
+            Employee employee1 = employeeService.save(employee);// Creates new ID
+            assertNotNull(employee1.getId());
             verify(mockEmployeeRepository,atLeastOnce()).save(employee);
 
         }
@@ -207,19 +197,17 @@ public class EmployeeServiceImpMockTest {
         @DisplayName("If 0 should assign a new value")
         void saveId0Test() {
 
-            // TODO
+
             assumeTrue(employeeService.count() == 3);
 
             Employee employee = employeeService.findOne(1L);
             employee.setId(0L);
             Employee employee1 = employeeService.save(employee);
             assertEquals(1L,employee1.getId());
-            verify(mockEmployeeRepository,atLeastOnce()).findOne(null);
-
         }
 
         @Test
-        @DisplayName("Comprobar actualizacion correcta")
+        @DisplayName("Correct update")
         void saveUpdateTest() {
 
             // TODO
@@ -238,16 +226,12 @@ public class EmployeeServiceImpMockTest {
         @Test
         @DisplayName("Saves a negative ID into the Database")
         void saveNegativeID() {
-            //TODO
-            // Negative Id's are processed Intended usage??
+
             assumeTrue(employeeService.count() == 3);
 
             Employee employee = employeeService.findOne(1L);
             employee.setId(-10L);
             Employee employee1 = employeeService.save(employee);
-            assertEquals(4, employeeService.count());
-
-            assertNotNull(employeeService.findOne(-10L));
             assertNotNull(employee1.getId());
 
             verify(mockEmployeeRepository,atLeastOnce()).save(employee);

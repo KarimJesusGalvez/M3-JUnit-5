@@ -2,6 +2,7 @@ package com.example.demo.service.KarimTests.repository;
 
 import com.example.demo.domain.Employee;
 
+import com.example.demo.domain.SmartPhone;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.repository.EmployeeRepositoryImpl;
 
@@ -13,6 +14,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
+@DisplayName("Employee Repository Tests")
+@TestClassOrder(ClassOrderer.ClassName.class)
 
 public class EmployeeRepositoryImpTest {
 
@@ -24,48 +27,51 @@ public class EmployeeRepositoryImpTest {
       employeeRepository = new EmployeeRepositoryImpl();
     }
 
+
+    @Test
+    @DisplayName("Object creation check")
+    void NullConstructorTest() {assertNotNull(employeeRepository);}
+
     @Test
     @DisplayName("Check integrity of List")
-    void checkEmployeesTest() {
-        // No access to map from outside class
-    }
+    void checkEmployeesTest() {}
+    // No access to map from outside class
 
-    @Test
-    void checkConstructNullTest() {
-        assertNotNull(employeeRepository);
-    }
-@Nested
+    @Nested
+    @DisplayName("Number of registries tests")
     public class COUNT_tests {
 
-    @Test
-    @DisplayName("Type test not relevant")
-    void checkCountTypeTest() {
-        // No access to map from outside class
-        // cannot check .keyset() or .size()
-        int tempint = employeeRepository.count();
-        assertEquals(3, tempint);
-        long templong = employeeRepository.count();
-        assertEquals(3, templong);
-    }
+        @Test
+        @DisplayName("Number updates when List does")
+        void AddNewCountTest() {
+            // No access to map from outside class
+            // cannot check .keyset() or .size()
+            int tempint = employeeRepository.count();
+            assertEquals(3, tempint);
 
-    @Test
-    @DisplayName("Number valid number of elements")
-    void countTest() {
-        System.out.println("count test2");
-        Integer num = employeeRepository.count();
-        assertAll(
-                () -> assertNotNull(num),
-                () -> assertTrue(num > 0),
-                () -> assertEquals(3, num)
-        );
-    }
-}
-    @Nested
-    public class FIND_tests {
-
+            employeeRepository.save(new Employee (4L,"Emp 1", 30));
+            long templong = employeeRepository.count();
+            assertEquals(4, templong);
+        }
 
         @Test
-        @DisplayName("display all entries")
+        @DisplayName("Returns valid number of elements")
+        void countTest() {
+            System.out.println("count test2");
+            Integer num = employeeRepository.count();
+            assertAll(
+                    () -> assertNotNull(num),
+                    () -> assertTrue(num > 0),
+                    () -> assertEquals(3, num)
+            );
+        }
+    }
+    @Nested
+    @DisplayName("Find registries")
+    public class FIND_tests {
+
+        @Test
+        @DisplayName("Display all entries")
         void findAllReturnTest() {
 
             List<Employee> found = employeeRepository.findAll();
@@ -86,7 +92,7 @@ public class EmployeeRepositoryImpTest {
         }
 
         @Test
-        @DisplayName("check an id")
+        @DisplayName("Check a single id")
         void findOneReturn1Test() {
 
             Employee found = employeeRepository.findOne(1L);
@@ -101,7 +107,7 @@ public class EmployeeRepositoryImpTest {
         }
 
         @Test
-        @DisplayName("check the null id")
+        @DisplayName("Check the null id")
         void findOneReturnNullTest() {
 
             try {
@@ -115,10 +121,12 @@ public class EmployeeRepositoryImpTest {
     }
 
         @Nested
+        @DisplayName("Saves in repository")
         public class SAVE_Tests {
 
 
             @Test
+            @DisplayName("Saves a null object")
             void saveNullObjectTest() {
                 // Shouldn't save empty obj
                 Employee employee = new Employee();
@@ -131,6 +139,7 @@ public class EmployeeRepositoryImpTest {
             }
 
             @Test
+            @DisplayName("Saves a null-Id object")
             void saveIdNullTest() {
                 assumeTrue(employeeRepository.count() == 3);
 
@@ -143,7 +152,7 @@ public class EmployeeRepositoryImpTest {
             }
 
             @Test
-            @DisplayName("If 0 should assign a new value")
+            @DisplayName("Saves a 0-Id Object")
             void saveId0Test() {
                 assumeTrue(employeeRepository.count() == 3);
 
@@ -157,7 +166,7 @@ public class EmployeeRepositoryImpTest {
             }
 
             @Test
-            @DisplayName("Comprobar actualizacion correcta")
+            @DisplayName("Updates the registry")
             void saveUpdateTest() {
                 assumeTrue(employeeRepository.count() == 3);
 
@@ -185,50 +194,41 @@ public class EmployeeRepositoryImpTest {
             }
         }
         @Nested
+        @DisplayName("Changes Id if necessary")
         public class GETIDMAXtests {
+        // The method is only accesible from .save()
+            // passing a null or 0 as argument
 
             @Test
-            @DisplayName("check empty map")
+            @DisplayName("Change a null Id")
             void GetMaxIdEmptyTest() {
+
                 employeeRepository.deleteAll();
                 Employee employee = new Employee();
                 employeeRepository.save(employee);
-                //Employee employee1 = employeeRepository.get;
-               // assertTrue();
-
-            }
-
-            @Test
-            @DisplayName("check valid map")
-            void GetMaxIdNOTEmptyTest() {
-                // No access checked through save
-                // returns max id value stored
             }
         }
 
         @Nested
+        @DisplayName("Delete methods")
         public class DELETE_tests {
 
             @Test
-            @DisplayName("check the null id")
-            void deleteAllNullTest() {
-                // ?? cannot check if, no access to employees
-                employeeRepository.deleteAll();
-            }
-
-            @Test
+            @DisplayName("Doesn't delete a null ID")
             void deleteNullTest() {
                 boolean result = employeeRepository.delete(null);
                 assertFalse(result);
             }
 
             @Test
+            @DisplayName("Doesn't delete an invalid ID")
             void deleteNotContainsTest() {
                 boolean result = employeeRepository.delete(-1L);
                 assertFalse(result);
             }
 
             @Test
+            @DisplayName("Deletes one registry")
             void deleteOKTest() {
                 //assumeTrue(3 == employeeRepository.count());
                 int temp = employeeRepository.count();
@@ -238,6 +238,7 @@ public class EmployeeRepositoryImpTest {
             }
 
             @Test
+            @DisplayName("Deletes all registries written")
             void deleteAllNotEmptyTest() {
                 assertTrue(employeeRepository.count() > 0);
                 employeeRepository.deleteAll();
@@ -247,13 +248,14 @@ public class EmployeeRepositoryImpTest {
             }
 
             @Test
+            @DisplayName("Delete Empty Repository")
             void deleteAllEmptyTest() {
                 // Does nothing
                 EmployeeRepositoryImpl employeeRepository = new EmployeeRepositoryImpl();
                 employeeRepository.deleteAll();
                 assertEquals(0, employeeRepository.count());
-
             }
+
         }
     }
 

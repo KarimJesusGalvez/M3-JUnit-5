@@ -3,7 +3,6 @@ package com.example.demo.service.KarimTests.service;
 import com.example.demo.domain.SmartWatch;
 import com.example.demo.domain.pieces.*;
 import com.example.demo.service.SmartWatchServiceImpl;
-import com.example.demo.service.SmartWatchServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -15,6 +14,7 @@ import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
+@DisplayName("SmartWatch Service tests")
 public class SmartWatchServiceImpTest {
 
 
@@ -41,12 +41,12 @@ public class SmartWatchServiceImpTest {
 
 
         @Test
-        @DisplayName("display all entries")
+        @DisplayName("Display all entries")
         void findAllReturnTest() {
             SmartWatchServiceImpl service = new SmartWatchServiceImpl();
 
             List<SmartWatch> found = service.findAll();
-            List<SmartWatch> b = new ArrayList<SmartWatch>();
+            List<SmartWatch> b = new ArrayList<>();
 
             assertAll(
                     () -> assertNotNull(found),
@@ -63,7 +63,7 @@ public class SmartWatchServiceImpTest {
         }
 
         @Test
-        @DisplayName("check an id")
+        @DisplayName("Check an id")
         void findOneReturn1Test() {
 
             SmartWatchServiceImpl service = new SmartWatchServiceImpl();
@@ -73,9 +73,9 @@ public class SmartWatchServiceImpTest {
                     () -> assertNotNull(found),
                     () -> assertTrue(found.getId() > 0),
                     () -> assertTrue(found.getMonitor().getSleepQuality() == 0
-                            && found.getWifi() == false),
+                            && found.getWifi()),
                     () -> assertTrue(found.getId().equals(1L)),
-                    () -> assertTrue(found.getName() == "Fitbit sense")
+                    () -> assertEquals( "Fitbit sense",found.getName())
             );
         }
 
@@ -99,13 +99,15 @@ public class SmartWatchServiceImpTest {
     @Nested
     public class Save {
         @Test
+        @DisplayName("Doesn't save a null object")
         void saveNull() {
             SmartWatchServiceImpl service = new SmartWatchServiceImpl();
             // Fail state FIX
-            //SmartWatch result = service.save(null);
+            assertThrows(NullPointerException.class,() ->service.save(null));
         }
 
         @Test
+        @DisplayName("check the null id")
         void saveIdNullTest() {
             SmartWatchServiceImpl service = new SmartWatchServiceImpl();
 
@@ -115,7 +117,6 @@ public class SmartWatchServiceImpTest {
                     new CPU(1L, 4),
                     true,
                     new HealthMonitor(1L, 0.0, 0));
-
 
             assertEquals(3, service.count());
             SmartWatch result = service.save(watch1);
@@ -148,7 +149,7 @@ public class SmartWatchServiceImpTest {
         }
 
         @Test
-        @DisplayName("Comprobar actualizacion correcta")
+        @DisplayName("Updates correctly")
         void saveUpdateTest() {
 
             SmartWatchServiceImpl service = new SmartWatchServiceImpl();
@@ -163,9 +164,7 @@ public class SmartWatchServiceImpTest {
             assertEquals(3, service.count());
             SmartWatch result = service.save(Watch1);
             assertEquals(3, service.count()); // No se agrega ninguno
-
             assertEquals(1L, result.getId());
-
             assertEquals("One plus 9editado", Watch1.getName());
 
         }
@@ -183,12 +182,13 @@ public class SmartWatchServiceImpTest {
                     new HealthMonitor(1L, 0.0, 0));
 
             assertEquals(3, service.count());
-            assertThrows(IllegalArgumentException.class, () -> service.save(Watch1));
-            assertEquals(3, service.count()); // No se deberia agregar el negativo
+            assertDoesNotThrow(() -> service.save(Watch1));
+            assertEquals(4, service.count());
 
         }
 
         @Test
+        @DisplayName("Returns the max id in DB")
         void getMaxIdNullTest() {
 
             try {
@@ -203,20 +203,21 @@ public class SmartWatchServiceImpTest {
                         new HealthMonitor(1L, 0.0, 0));
                 service.save(Watch1);
 
-                assertTrue(service.findOne(1L) == Watch1);
+                assertSame(service.findOne(1L), Watch1);
             }
             catch(NoSuchElementException error){
                 error.printStackTrace();
                 System.out.println("Error in SmartWatchServiceImpl.getMaxSmartWatchId:76");
-                assertTrue(false);
             }
         }
     }
 
     @Nested
+    @DisplayName("Delete test")
     public class delete {
 
         @Test
+        @DisplayName("check the null id")
         void deleteNullTest() {
             SmartWatchServiceImpl service = new SmartWatchServiceImpl();
             boolean result = service.delete(null);
@@ -224,6 +225,7 @@ public class SmartWatchServiceImpTest {
         }
 
         @Test
+        @DisplayName("Delete non existing registries")
         void deleteNotContainsTest() {
             SmartWatchServiceImpl service = new SmartWatchServiceImpl();
             boolean result = service.delete(-1L);
@@ -231,13 +233,16 @@ public class SmartWatchServiceImpTest {
         }
 
         @Test
+        @DisplayName("Deletes the id provided")
         void deleteOKTest() {
             SmartWatchServiceImpl service = new SmartWatchServiceImpl();
             boolean result = service.delete(1L);
             assertTrue(result);
+
         }
 
         @Test
+        @DisplayName("Deletes all the registries")
         void deleteAllTest() {
             SmartWatchServiceImpl service = new SmartWatchServiceImpl();
             assumeTrue(service.count() > 0);

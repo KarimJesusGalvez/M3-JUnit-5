@@ -42,9 +42,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee save(Employee employee) {
-        return this.employeeRepository.save(employee);
-    }
+    public Employee save(Employee employee) {return this.employeeRepository.save(employee);}
 
     @Override
     public boolean delete(Long id) {

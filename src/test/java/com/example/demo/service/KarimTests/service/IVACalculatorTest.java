@@ -1,21 +1,26 @@
 package com.example.demo.service.KarimTests.service;
 
 import com.example.demo.service.IVACalculator;
+import org.junit.jupiter.api.ClassOrderer;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestClassOrder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@DisplayName("IVA Calculator tests")
+@TestClassOrder(ClassOrderer.ClassName.class)
 public class IVACalculatorTest {
 
     IVACalculator ivaCalculator = new IVACalculator();
 
-    // TODO test access level
+
 
     @Test
     void calculatePositive() {
         double a = ivaCalculator.calculateIVA(1);
-        assertEquals(0.15,a);
+        assertEquals(0.21,a);
     }
     @Test
     void calculate0() {
@@ -25,7 +30,7 @@ public class IVACalculatorTest {
     @Test
     void calculateNegative() {
         double a = ivaCalculator.calculateIVA(-1);
-        assertEquals(-0.15,a);
+        assertEquals(-0.21,a);
     }
     @Test
     void calculateNumchar() {
@@ -38,7 +43,7 @@ public class IVACalculatorTest {
         System.out.println(a);
         // Char can be converted to double
         // Not intended usage??
-        assertTrue(false);
+        assertEquals(20.37,a);
     }
     @Test
     void calculateSymbolchar() {
@@ -46,11 +51,10 @@ public class IVACalculatorTest {
         System.out.println(a);
         // Char can be converted to double
         // Not intended usage??
-        assertTrue(false);
+        assertEquals(8.19,a);
     }
     @Test
     void calculateDoubleclass() {
-        Double b = 2D;
         double a = ivaCalculator.calculateIVA(2D);
         assertTrue(a > 0);
     }

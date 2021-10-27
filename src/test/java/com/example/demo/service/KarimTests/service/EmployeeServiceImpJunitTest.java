@@ -5,10 +5,7 @@ import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.repository.EmployeeRepositoryImpl;
 import com.example.demo.service.EmployeeService;
 import com.example.demo.service.EmployeeServiceImpl;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
+@DisplayName("Employee Service Tests")
+@TestClassOrder(ClassOrderer.ClassName.class)
 public class EmployeeServiceImpJunitTest {
 
     EmployeeService employeeService;
@@ -50,7 +49,7 @@ public class EmployeeServiceImpJunitTest {
         void findAllReturnTest() {
 
             List<Employee> found = employeeService.findAll();
-            List<Employee> b = new ArrayList<Employee>();
+            List<Employee> b = new ArrayList<>();
 
             assertAll(
                     () -> assertNotNull(found),
@@ -105,8 +104,7 @@ public class EmployeeServiceImpJunitTest {
             Employee employee = new Employee();
             //assumeTrue(employee == null);
             int temp = employeeService.count();
-            Employee employee1 = employeeService.save(employee);
-            //assertNull(employee1);
+            employeeService.save(employee);
             assertTrue(temp < employeeService.count());
 
         }
